@@ -24,7 +24,7 @@ def home():
     a = 'hello world!'
     return a
 
-@app.route('/usa_top10')
+@app.route('/usa_top10') #美股市值前10大
 def usa_top10():
     """美股市值前10大(鉅亨網) #https://www.cnyes.com/usstock
           --Output :
@@ -64,7 +64,7 @@ def usa_top10():
     jdf = md.get_usa_top10()
     return jdf
 
-@app.route('/usa_stock')
+@app.route('/usa_stock') #美股大型機構持股名單
 def usa_stock():
     """美國大型機構持股名單(moneybar) #https://www.moneybar.com.tw/investbar/usstock
        備註:因為為現爬，需等待
@@ -96,7 +96,7 @@ def usa_stock():
     jdf = md.get_usa_stock()
     return jdf
 
-@app.route('/stock_calendar')
+@app.route('/stock_calendar') #近期台股行事曆
 def stock_calendar():
     """近期台股行事曆(histock) #https://histock.tw/stock/stockskd.aspx?cid=2
           --Output :
