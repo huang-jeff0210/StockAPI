@@ -209,3 +209,142 @@ def get_tw_calendar():
     df = DF.to_json(orient="records", force_ascii=False)
     print(df)
     return df
+
+#台股概念股
+def get_concept_stock():
+    tt = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    
+    def get_url(url):
+        resp = requests.get(url)
+        soup = BeautifulSoup(resp.content,'html.parser')
+        return soup
+
+    def get_data(soup):
+        concept = soup.find('div',{'id':"CONCEPT_STOCK"})
+        a_tag = concept.find_all('a')
+
+        categories = []
+        for i in a_tag:
+            categories.append(i.text)
+        
+        stock = pd.DataFrame()
+
+        for category in categories:
+            url = f'https://tw.stock.yahoo.com/class-quote?category={category}&categoryLabel=概念股'
+            if category == '互聯網+':
+                url = f'https://tw.stock.yahoo.com/class-quote?category=互聯網%2B&categoryLabel=概念股'
+            resp = requests.get(url)
+            soup = BeautifulSoup(resp.content,'html.parser')
+            number = soup.find('p','Pb(0px) C(#6e7780) Fz(14px) Fz(14px)--mobile Fw(n)')
+            nums = number.text.split(" ")
+            print(nums[1])
+            table = soup.find('div','Pos(r) Ov(h) ClassQuotesTable')
+            names = table.find_all('div','Lh(20px) Fw(600) Fz(16px) Ell')
+            name = []
+            code = []
+            for i in names:
+                name.append(i.text)
+            codes = table.find_all('div','D(f) Ai(c)')
+            for i in codes:
+                j = i.text.split(".")
+                code.append(j[0])
+
+            if int(nums[1]) > 30:
+                print(category)
+                url = f'https://tw.stock.yahoo.com/_td-stock/api/resource/StockServices.getClassQuotes;category={category};categoryLabel=概念股;categoryName={category};offset=30?bkt=&device=desktop&ecma=modern&feature=ecmaModern%2CuseVersionSwitch%2CuseNewQuoteTabColor&intl=tw&lang=zh-Hant-TW&partner=none&prid=7amdksphccick&region=TW&site=finance&tz=Asia%2FTaipei&ver=1.2.1393&returnMeta=true'
+                resp = requests.get(url)
+                data = resp.json()
+                for i in data['data']['list']:
+                    name.append(i['symbolName'])
+                    code.append(i['systexId'])
+
+            if int(nums[1]) > 60:
+                print(category)
+                url = f'https://tw.stock.yahoo.com/_td-stock/api/resource/StockServices.getClassQuotes;category={category};categoryLabel=概念股;categoryName={category};offset=60?bkt=&device=desktop&ecma=modern&feature=ecmaModern%2CuseVersionSwitch%2CuseNewQuoteTabColor&intl=tw&lang=zh-Hant-TW&partner=none&prid=7amdksphccick&region=TW&site=finance&tz=Asia%2FTaipei&ver=1.2.1393&returnMeta=true'
+                resp = requests.get(url)
+                data = resp.json()
+                for i in data['data']['list']:
+                    name.append(i['symbolName'])
+                    code.append(i['systexId'])
+
+            data = pd.DataFrame()
+            data['Name'] = name
+            data['Code'] = code
+            data['Concept'] = category
+            data['Input_Time'] = tt
+            print(data)
+            stock = stock.append(data)
+        print(stock)
+        return stock
+
+    URL = 'https://tw.stock.yahoo.com/class'
+    DATA = get_url(URL)
+    DF = get_data(DATA)
+
+    df = DF.to_json(orient="records", force_ascii=False)
+    print(df)
+    return df
+
+#台股集團股
+def get_consortium_stock():
+    tt = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    
+    def get_url(url):
+        resp = requests.get(url)
+        soup = BeautifulSoup(resp.content,'html.parser')
+        return soup
+
+    def get_data(soup):
+        concept = soup.find('div',{'id':"CONSORTIUM_STOCK"})
+        a_tag = concept.find_all('a')
+
+        categories = []
+        for i in a_tag:
+            categories.append(i.text)
+
+        stock = pd.DataFrame()
+
+        for category in categories:
+            url = f'https://tw.stock.yahoo.com/class-quote?category={category}&categoryLabel=集團股'
+            resp = requests.get(url)
+            soup = BeautifulSoup(resp.content,'html.parser')
+            number = soup.find('p','Pb(0px) C(#6e7780) Fz(14px) Fz(14px)--mobile Fw(n)')
+            nums = number.text.split(" ")
+            print(nums[1])
+            table = soup.find('div','Pos(r) Ov(h) ClassQuotesTable')
+            names = table.find_all('div','Lh(20px) Fw(600) Fz(16px) Ell')
+            name = []
+            code = []
+            for i in names:
+                name.append(i.text)
+            codes = table.find_all('div','D(f) Ai(c)')
+            for i in codes:
+                j = i.text.split(".")
+                code.append(j[0])
+
+            data = pd.DataFrame()
+            data['Name'] = name
+            data['Code'] = code
+            data['Concept'] = category
+            data['Input_Time'] = tt
+            print(data)
+            stock = stock.append(data)
+        print(stock)
+        return stock
+
+    URL = 'https://tw.stock.yahoo.com/class'
+    SOUP = get_url(URL)
+    DF = get_data(SOUP)
+
+    df = DF.to_json(orient="records", force_ascii=False)
+    print(df)
+    return df
+
+
+
+
+
+
+
+
+

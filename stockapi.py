@@ -125,6 +125,65 @@ def stock_calendar():
     jdf = md.get_tw_calendar()
     return jdf
 
+@app.route('/concept_stock') #yahoo股市概念股
+def concept_stock():
+    """yahoo股市概念股 #https://tw.stock.yahoo.com/class
+    備註:因為為現爬，需等待
+
+          --Output :
+          [{"Name":"百和","Code":"9938","Concept":"Nike供應鏈","Input_Time":"2022-11-19 22:25:26"}]
+
+          --Output Memo:
+          Name:股票名稱
+          Code:股票代碼
+          Concept:概念股
+          Input_Time:寫入時間     
+         ---
+         tags:
+          - 台股資訊
+
+         responses:
+           200:
+             description: 成功
+
+           500:
+             description: 錯誤函數
+
+       """
+
+    jdf = md.get_concept_stock()
+    return jdf
+
+@app.route('/consortium_stock') #yahoo股市概念股
+def consortium_stock():
+    """yahoo股市集團股 #https://tw.stock.yahoo.com/class
+    備註:因為為現爬，需等待
+
+          --Output :
+          [{"Name":"台泥","Code":"1101","Concept":"台泥","Input_Time":"2022-11-19 22:36:07"}]
+
+          --Output Memo:
+          Name:股票名稱
+          Code:股票代碼
+          Concept:集團股
+          Input_Time:寫入時間     
+         ---
+         tags:
+          - 台股資訊
+
+         responses:
+           200:
+             description: 成功
+
+           500:
+             description: 錯誤函數
+
+       """
+
+    jdf = md.get_consortium_stock()
+    return jdf
+
+
 
 if __name__ == "__main__":
     try:
