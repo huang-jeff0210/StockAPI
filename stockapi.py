@@ -183,6 +183,40 @@ def consortium_stock():
     jdf = md.get_consortium_stock()
     return jdf
 
+'''改成post不同市場''' #11/20
+@app.route('/stock_infomation') #上市、上櫃、興櫃 股票代碼
+def stock_infomation():
+    """上市、上櫃、興櫃 股票代碼 #https://www.twse.com.tw/zh/page/products/stock-code2.html
+    備註:因為為現爬，需等待
+
+          --Output :
+          [{"股票代碼":"5274","股票名稱":"信驊","市場別":"上櫃","產業別":"半導體業","上市日":"2013\/04\/30","國際證券辨識號碼(ISIN Code)":"TW0005274005","CFICode":"ESVUFR","爬取類型":"上櫃"}]
+
+          --Output Memo:
+          股票代碼
+          股票名稱
+          市場別
+          產業別
+          上市日
+          國際證券辨識號碼(ISIN Code)
+          CFICode
+          爬取類型  
+         ---
+         tags:
+          - 台股資訊
+
+         responses:
+           200:
+             description: 成功
+
+           500:
+             description: 錯誤函數
+
+       """
+
+    jdf = md.get_stock_infomation()
+    return jdf
+
 
 
 if __name__ == "__main__":
