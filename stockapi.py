@@ -73,8 +73,7 @@ def get_USA_stock():
         {"code":"USMV10"}
 
       --Output :
-        {"Datetime":"04\/24","代碼":"AAPL","名稱":"蘋果","最新價":165.02,"漲跌":-1.63,"漲跌%":-0.9781,"成交(股)2":"5656.27萬","成交(股)":56562743.0,"市值(USD)2":"2.61兆","市值(USD)":2610930000000.0,"本益比":28.037,"殖利率":0.557508,"預估目標值":171.410811,"預估券商家數":37,"Inputtime":"2023-04-24 09:41:32"}
-
+        {"Datetime":"04\/24","代碼":"AAPL","名稱":"蘋果","最新價":164.92,"漲跌":-0.1,"漲跌%":-0.0606,"成交(股)2":"665.47萬","成交(股)":6654677.0,"市值(USD)2":"2.61兆","市值(USD)":2610930000000.0,"本益比":28.037,"殖利率":0.557508,"預估目標值":171.410811,"預估券商家數":37,"Inputtime":"2023-04-24 22:28:32","PAGE_TYPE":"市值前10大"}
       ---
       tags:
        - 美股資訊
@@ -102,20 +101,20 @@ def get_USA_stock():
     """
     code = request.get_json()
     DF = md.get__cnyes_inf(code['code'])
-    # DF['PAGE_TYPE'] = '道瓊30'
+    code_dict = {'USMV10':'市值前10大','USTOP10':'10大明星股','USSEMI10':'半導體','CADR10':'ADR中概股', 'TADR10':'ADR台股'}
+    DF['PAGE_TYPE'] = code_dict[code['code']]
     DF = DF.to_json(orient="records", force_ascii=False)
     return DF
 
 @app.route('/get_USA_stock2', methods = ['POST'])
 def get_USA_stock2():
     """爬取美股資訊 
-      USFOCUS-ADR台股 TOPETF-ETF龍頭 FIETF-ETF固定收益  PRODETF-ETF商品 USINDEX-美股指數 SBUP-美國公債殖利率
+      USFOCUS-焦點股  TOPETF-ETF龍頭  FIETF-ETF固定收益  PRODETF-ETF商品  USINDEX-美股指數  SBUP-美國公債殖利率
      --Input :
         {"code":"USFOCUS"}
 
       --Output :
-        {"Datetime":"04\/24","代碼":"ARKK","名稱":"ARK 創新 ETF","最新價":37.66,"漲跌":0.03,"漲跌%":0.0797,"Inputtime":"2023-04-24 22:13:03"}
-
+        {"Datetime":"04\/24","代碼":"ARKK","名稱":"ARK 創新 ETF","最新價":37.3,"漲跌":-0.33,"漲跌%":-0.877,"Inputtime":"2023-04-24 22:31:11","PAGE_TYPE":"焦點股"}
       ---
       tags:
        - 美股資訊
@@ -143,7 +142,8 @@ def get_USA_stock2():
     """
     code = request.get_json()
     DF = md.get__cnyes_inf2(code['code'])
-    # DF['PAGE_TYPE'] = '道瓊30'
+    code_dict = {'USFOCUS':'焦點股','TOPETF':'ETF龍頭','FIETF':'ETF固定收益','PRODETF':'ETF商品', 'USINDEX':'美股指數','SBUP':'美國公債殖利率'}
+    DF['PAGE_TYPE'] = code_dict[code['code']]
     DF = DF.to_json(orient="records", force_ascii=False)
     return DF
 
@@ -187,6 +187,7 @@ def get_USA_dj30():
     DF['PAGE_TYPE'] = '道瓊30'
     DF = DF.to_json(orient="records", force_ascii=False)
     return DF
+
 
 @app.route('/usa_stock') #美股大型機構持股名單
 def usa_stock():
