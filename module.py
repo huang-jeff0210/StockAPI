@@ -57,6 +57,125 @@ def get_usa_top10():
     print(df)
     return df
 
+
+#鉅亨網美股資訊
+def get__cnyes_inf(code):
+    def vol_change(col):
+        k = []
+        for i in col:
+            if i/1000000000000 >= 1:
+                k.append(str(round(i/1000000000000,2)) + '兆')
+            elif i/100000000 >= 1:
+                k.append(str(round(i/100000000,2)) + '億')
+            elif i/10000 >= 1:
+                k.append(str(round(i/10000,2)) + '萬')
+            else:
+                k.append(i)
+        return k
+
+    def get_data(code):
+        url = f'https://ws.api.cnyes.com/ws/api/v2/universal/quote?type={code}&column=H&page=0&limit=10'
+        resp = requests.get(url)
+        data = resp.json()
+        i = data["data"]
+        df = pd.json_normalize(i, 'items')
+        return df
+
+    def get_dataframe(DF):
+        df = DF[['0','200009','6','11','56','800001','700005','700001','700002','700003','700004']]
+        columns = ['資訊', '名稱', '最新價', '漲跌', '漲跌%', '成交(股)', '市值(USD)', '本益比', '殖利率', '預估目標值', '預估券商家數']
+        df.columns = columns
+        df[['country','代碼','type']] = df['資訊'].str.split(':',expand = True)
+        df = df.drop(columns=['資訊','country','type'])
+        df['市值(USD)'] = df['市值(USD)']*1000000
+        tt = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        df['Inputtime'] = tt
+        dd = time.strftime("%m/%d", time.localtime())
+        df['Datetime'] = dd
+        df['成交(股)2'] = vol_change(df['成交(股)'])
+        df['市值(USD)2'] = vol_change(df['市值(USD)'])
+        df = df[['Datetime','代碼', '名稱', '最新價', '漲跌', '漲跌%', '成交(股)2', '成交(股)', '市值(USD)2', '市值(USD)', '本益比', '殖利率', '預估目標值', '預估券商家數','Inputtime']]
+        # print(df)
+        return df
+
+    data = get_data(code)
+    df = get_dataframe(data)
+    print(df)
+    return df
+
+def get__cnyes_inf2(code):
+    def get_data(code):
+        url = f'https://ws.api.cnyes.com/ws/api/v2/universal/quote?type={code}'
+        resp = requests.get(url)
+        data = resp.json()
+        i = data["data"]
+        df = pd.json_normalize(i, 'items')
+        return df
+
+    def get_dataframe(DF):
+        df = DF[['0','200009','6','11','56']]
+        columns = ['資訊', '名稱', '最新價', '漲跌', '漲跌%']
+        df.columns = columns
+        df[['country','代碼','type']] = df['資訊'].str.split(':',expand = True)
+        df = df.drop(columns=['資訊','country','type'])
+        tt = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        df['Inputtime'] = tt
+        dd = time.strftime("%m/%d", time.localtime())
+        df['Datetime'] = dd
+        df = df[['Datetime','代碼','名稱', '最新價', '漲跌', '漲跌%','Inputtime']]
+        df = df.fillna(0)
+        return df
+
+    data = get_data(code)
+    df = get_dataframe(data)
+    print(df)
+    return df
+
+def get__cnyes_dj(code):
+    def vol_change(col):
+        k = []
+        for i in col:
+            if i/1000000000000 >= 1:
+                k.append(str(round(i/1000000000000,2)) + '兆')
+            elif i/100000000 >= 1:
+                k.append(str(round(i/100000000,2)) + '億')
+            elif i/10000 >= 1:
+                k.append(str(round(i/10000,2)) + '萬')
+            else:
+                k.append(i)
+        return k
+
+    def get_data(page):
+        url = f'https://ws.api.cnyes.com/ws/api/v2/universal/quote?type=DJI30&column=H&page={page}&limit=10'
+        resp = requests.get(url)
+        data = resp.json()
+        i = data["data"]
+        df = pd.json_normalize(i, 'items')
+        return df
+
+    def get_dataframe(DF):
+        df = DF[['0','200009','6','11','56','800001','700005','700001','700002','700003','700004']]
+        columns = ['資訊', '名稱', '最新價', '漲跌', '漲跌%', '成交(股)', '市值(USD)', '本益比', '殖利率', '預估目標值', '預估券商家數']
+        df.columns = columns
+        df[['country','代碼','type']] = df['資訊'].str.split(':',expand = True)
+        df = df.drop(columns=['資訊','country','type'])
+        df['市值(USD)'] = df['市值(USD)']*1000000
+        tt = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        df['Inputtime'] = tt
+        dd = time.strftime("%m/%d", time.localtime())
+        df['Datetime'] = dd
+        df['成交(股)2'] = vol_change(df['成交(股)'])
+        df['市值(USD)2'] = vol_change(df['市值(USD)'])
+        df = df[['Datetime','代碼', '名稱', '最新價', '漲跌', '漲跌%', '成交(股)2', '成交(股)', '市值(USD)2', '市值(USD)', '本益比', '殖利率', '預估目標值', '預估券商家數','Inputtime']]
+        # print(df)
+        return df
+
+    data = get_data(code)
+    df = get_dataframe(data)
+    print(df)
+    return df
+
+
 #美股大型機構持股名單
 def get_usa_stock():
     def get_soup(url):
