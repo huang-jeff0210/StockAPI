@@ -26,13 +26,11 @@ def home():
 
 @app.route('/usa_top10') #美股市值前10大
 def usa_top10():
-    """美股市值前10大(鉅亨網) #https://www.cnyes.com/usstock
-          --Output :
-          [{"Datetime":"11\/13","代碼":"AAPL","名稱":"蘋果","最新價":149.7,"漲跌":2.83,"漲跌%":1.9269,"成交(股)2":"9334.51萬","成交(股)":93345144.0,
-          "市值(USD)2":"2.34兆","市值(USD)":2336420000000.0,"本益比":24.0251,"殖利率":0.612787,"預估目標值":175.304595,
-          "預估券商家數":37,"Inputtime":"2022-11-13 10:47:00"}]
+    """ 美股市值前10大(鉅亨網) #https://www.cnyes.com/usstock
+        --Output :
+        [{"Datetime":"11\/13","代碼":"AAPL","名稱":"蘋果","最新價":149.7,"漲跌":2.83,"漲跌%":1.9269,"成交(股)2":"9334.51萬","成交(股)":93345144.0,"市值(USD)2":"2.34兆","市值(USD)":2336420000000.0,"本益比":24.0251,"殖利率":0.612787,"預估目標值":175.304595,"預估券商家數":37,"Inputtime":"2022-11-13 10:47:00"}]
 
-          --Output Memo:
+        --Output Memo:
             Datetime:日期,
             代碼,
             名稱,
@@ -48,18 +46,18 @@ def usa_top10():
             預估目標值,
             預估券商家數,
             Inputtime:抓取時間        
-         ---
-         tags:
-          - 美股資訊
+        ---
+        tags:
+            - 美股資訊
 
-         responses:
-           200:
-             description: 成功
+        responses:
+            200:
+                description: 成功
 
-           500:
+            500:
              description: 錯誤函數
 
-       """
+    """
 
     jdf = md.get_usa_top10()
     return jdf
@@ -67,37 +65,37 @@ def usa_top10():
 #鉅亨網美股資訊
 @app.route('/get_USA_stock', methods = ['POST'])
 def get_USA_stock():
-    """爬取美股資訊 
-      市值前10大-USMV10   10大明星股-USTOP10   半導體-USSEMI10   ADR中概股-CADR10   ADR台股-TADR10
-     --Input :
-        {"code":"USMV10"}
+    """ 爬取美股資訊 
+        市值前10大-USMV10   10大明星股-USTOP10   半導體-USSEMI10   ADR中概股-CADR10   ADR台股-TADR10
+        --Input :
+            {"code":"USMV10"}
 
-      --Output :
-        {"Datetime":"04\/24","代碼":"AAPL","名稱":"蘋果","最新價":164.92,"漲跌":-0.1,"漲跌%":-0.0606,"成交(股)2":"665.47萬","成交(股)":6654677.0,"市值(USD)2":"2.61兆","市值(USD)":2610930000000.0,"本益比":28.037,"殖利率":0.557508,"預估目標值":171.410811,"預估券商家數":37,"Inputtime":"2023-04-24 22:28:32","PAGE_TYPE":"市值前10大"}
-      ---
-      tags:
-       - 美股資訊
+        --Output :
+            {"Datetime":"04\/24","代碼":"AAPL","名稱":"蘋果","最新價":164.92,"漲跌":-0.1,"漲跌%":-0.0606,"成交(股)2":"665.47萬","成交(股)":6654677.0,"市值(USD)2":"2.61兆","市值(USD)":2610930000000.0,"本益比":28.037,"殖利率":0.557508,"預估目標值":171.410811,"預估券商家數":37,"Inputtime":"2023-04-24 22:28:32","PAGE_TYPE":"市值前10大"}
+        ---
+        tags:
+            - 美股資訊
+        
+        parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+              id: 美股資訊
+              required:
+                  - code
+              properties:
+                  code:
+                      type: nvarchar
+                      example: "USMV10"
+                      description: 查找資訊
+      
+        responses:
+            200:
+                description: 成功
 
-      parameters:
-      - name: body
-        in: body
-        required: true
-        schema:
-          id: 美股資訊
-          required:
-            - code
-          properties:
-            code:
-              type: nvarchar
-              example: "USMV10"
-              description: 查找資訊       
-
-      responses:
-        200:
-          description: 成功
-
-        500:
-          description: 錯誤函數
+            500:
+                description: 錯誤函數
     """
     code = request.get_json()
     DF = md.get__cnyes_inf(code['code'])
@@ -108,37 +106,37 @@ def get_USA_stock():
 
 @app.route('/get_USA_stock2', methods = ['POST'])
 def get_USA_stock2():
-    """爬取美股資訊 
-      USFOCUS-焦點股  TOPETF-ETF龍頭  FIETF-ETF固定收益  PRODETF-ETF商品  USINDEX-美股指數  SBUP-美國公債殖利率
-     --Input :
-        {"code":"USFOCUS"}
+    """ 爬取美股資訊 
+        USFOCUS-焦點股  TOPETF-ETF龍頭  FIETF-ETF固定收益  PRODETF-ETF商品  USINDEX-美股指數  SBUP-美國公債殖利率
+        --Input :
+            {"code":"USFOCUS"}
 
-      --Output :
-        {"Datetime":"04\/24","代碼":"ARKK","名稱":"ARK 創新 ETF","最新價":37.3,"漲跌":-0.33,"漲跌%":-0.877,"Inputtime":"2023-04-24 22:31:11","PAGE_TYPE":"焦點股"}
-      ---
-      tags:
-       - 美股資訊
+        --Output :
+            {"Datetime":"04\/24","代碼":"ARKK","名稱":"ARK 創新 ETF","最新價":37.3,"漲跌":-0.33,"漲跌%":-0.877,"Inputtime":"2023-04-24 22:31:11","PAGE_TYPE":"焦點股"}
+        ---
+        tags:
+            - 美股資訊
+        
+        parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+              id: 美股指標
+              required:
+                  - code
+              properties:
+                  code:
+                      type: nvarchar
+                      example: "USFOCUS"
+                      description: 查找資訊       
 
-      parameters:
-      - name: body
-        in: body
-        required: true
-        schema:
-          id: 美股指標
-          required:
-            - code
-          properties:
-            code:
-              type: nvarchar
-              example: "USFOCUS"
-              description: 查找資訊       
+        responses:
+            200:
+                description: 成功
 
-      responses:
-        200:
-          description: 成功
-
-        500:
-          description: 錯誤函數
+            500:
+                description: 錯誤函數 
     """
     code = request.get_json()
     DF = md.get__cnyes_inf2(code['code'])
@@ -149,38 +147,38 @@ def get_USA_stock2():
 
 @app.route('/get_USA_dj30', methods = ['POST'])
 def get_USA_dj30():
-    """爬取美股道瓊30
+    """ 爬取美股道瓊30
         第0頁 1-10 第1頁 11-20 第2頁 21-30
-     --Input :
-        {"code":"USFOCUS"}
+        --Input :
+            {"code":"USFOCUS"}
 
-      --Output :
-        {"Datetime":"04\/24","代碼":"AAPL","名稱":"蘋果","最新價":165.14,"漲跌":0.12,"漲跌%":0.0727,"成交(股)2":"474.32萬","成交(股)":4743250.0,"市值(USD)2":"2.61兆","市值(USD)":2610930000000.0,"本益比":28.037,"殖利率":0.557508,"預估目標值":171.410811,"預估券商家數":37,"Inputtime":"2023-04-24 22:07:37","PAGE_TYPE":"道瓊30"}
+        --Output :
+            {"Datetime":"04\/24","代碼":"AAPL","名稱":"蘋果","最新價":165.14,"漲跌":0.12,"漲跌%":0.0727,"成交(股)2":"474.32萬","成交(股)":4743250.0,"市值(USD)2":"2.61兆","市值(USD)":2610930000000.0,"本益比":28.037,"殖利率":0.557508,"預估目標值":171.410811,"預估券商家數":37,"Inputtime":"2023-04-24 22:07:37","PAGE_TYPE":"道瓊30"}
 
-      ---
-      tags:
-       - 美股資訊
+        ---
+        tags:
+            - 美股資訊
 
-      parameters:
-      - name: body
-        in: body
-        required: true
-        schema:
-          id: 道瓊30
-          required:
-            - page
-          properties:
-            page:
-              type: int
-              example: "0"
-              description: 查找資訊       
+        parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+              id: 道瓊30
+              required:
+                  - page
+              properties:
+                  page:
+                      type: int
+                      example: "0"
+                      description: 查找資訊     
 
-      responses:
-        200:
-          description: 成功
+        responses:
+            200:
+                description: 成功
 
-        500:
-          description: 錯誤函數
+            500:
+                description: 錯誤函數
     """
     page = request.get_json()
     DF = md.get__cnyes_dj(page['page'])
