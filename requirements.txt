@@ -1,0 +1,8 @@
+bs4
+flask
+flask_cors
+flasgger
+datetime
+pandas
+numpy
+requests
